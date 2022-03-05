@@ -1,5 +1,6 @@
 html {
   box-sizing: border-box;
+  height: 100%;
 }
 
 *, *::before, *::after {
@@ -7,5 +8,40 @@ html {
 }
 
 body {
+  margin: 0;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+main,
+.gameboard,
+.grid-cell {
+  display: grid;
+}
+
+.gameboard {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.grid-cell {
+  width: 150px;
+  height: 150px;
+  border: 1px solid black;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  font-weight: extrabold;
+  cursor: pointer;
+}
+
+.grid-cell p {
   margin: 0;
 }
