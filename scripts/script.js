@@ -1,10 +1,31 @@
 const player = (function(){
   function registerMove(e) {
     let playId = e.path[0].id;
-    gameFlow.registerMove(playId);
+    gameFlow.registerMove(playId, 'x');
   }
 
   return {registerMove};
+})();
+
+const computer = (function() {
+  function play() {
+    let play = generateRandomNumber();
+    if (checkIfEmpty(play)) {
+      gameBoard.updateCurrentState(play, 'o');
+    } else {computer.play()}
+  }
+
+  function generateRandomNumber() {
+    return Math.floor(Math.random() * 9);
+  }
+
+  function checkIfEmpty(play) {
+    if (gameBoard.currentState[play]) {
+      return false;
+    } else return true;
+  }
+
+  return {play};
 })();
 
 const gameBoard = (function(){
@@ -20,8 +41,8 @@ const gameBoard = (function(){
     }
   }
 
-  function updateCurrentState(play) {
-    currentState[play] = 'x';
+  function updateCurrentState(play, xOrO) {
+    currentState[play] = xOrO;
   }
 
   function resetBoard() {
@@ -35,13 +56,21 @@ const gameBoard = (function(){
 })();
 
 const gameFlow = (function() {
-  function registerMove(play) {
-    gameBoard.updateCurrentState(play);
+  let over = false;
+
+  function registerMove(play, xOrO) {
+    gameBoard.updateCurrentState(play, xOrO);
     gameBoard.updateBoard();
     checkIfOver();
+    if (!over) {
+      computer.play();
+      gameBoard.updateBoard();
+      checkIfOver();
+    } else {over = false}
   }
 
   function announceDraw() {
+    over = true;
     console.log('It\'s a draw!');
   }
 
@@ -55,6 +84,7 @@ const gameFlow = (function() {
   }
 
   function announceWinner(winner) {
+    over = true;
     switch (winner) {
       case 'player':
         console.log('You win!');
@@ -165,5 +195,5 @@ const gameFlow = (function() {
     } 
   }
 
-  return {registerMove};
+  return {registerMove, over};
 })();
